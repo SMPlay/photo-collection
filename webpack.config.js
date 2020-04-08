@@ -1,6 +1,6 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -31,13 +31,55 @@ module.exports = {
             plugins: ["@babel/plugin-proposal-object-rest-spread"],
           },
         },
-    },
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: { sourceMap: true },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              sourceMap: true,
+              config: { path: "./postcss.config.js" },
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: { sourceMap: true },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: { sourceMap: true },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              sourceMap: true,
+              config: { path: "./postcss.config.js" },
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
     extensions: [".ts", ".js"],
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "style.css"
+    })
   ],
 };
