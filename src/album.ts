@@ -30,7 +30,7 @@ export class Album {
     }
   }
 
-  private queryAlbum(id: number): void {
+  public queryAlbum(id: number): void {
     fetch(`https://jsonplaceholder.typicode.com/albums/${id}/photos`)
       .then((response) => response.json())
       .then((response) => {
@@ -41,7 +41,7 @@ export class Album {
       .catch((error) => console.error(error));
   }
 
-  private renderImages(): void {
+  public renderImages(): void {
     this.imagesContainer.innerHTML = "";
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
@@ -52,13 +52,13 @@ export class Album {
     });
   }
 
-  private renderImagesContainer(): void {
+  public renderImagesContainer(): void {
     this.imagesContainer = document.createElement("div");
     this.imagesContainer.classList.add("album__image-container");
     this.albumContainer.append(this.imagesContainer);
   }
 
-  private renderAlbumTitle() {
+  public renderAlbumTitle(): void {
     this.albumTitle = document.createElement("div");
     this.albumTitle.classList.add("album__title");
     this.albumTitle.innerText = "Album Title";
@@ -66,7 +66,7 @@ export class Album {
     this.albumContainer.append(this.albumTitle);
   }
 
-  private renderButtons(): void {
+  public renderButtons(): void {
     this.leftButton = document.createElement("button");
     this.leftButton.classList.add("album__left-button");
     this.leftButton.textContent = "<";
@@ -83,7 +83,7 @@ export class Album {
     this.albumContainer.append(this.rightButton);
   }
 
-  private selectNewPage(direction: string): void {
+  public selectNewPage(direction: string): void {
     if (direction === "left") {
       if (this.currentPage === 1) {
         return;
@@ -101,11 +101,11 @@ export class Album {
     }
   }
 
-  private setDataInLocalStorage(): void{
+  public setDataInLocalStorage(): void{
     localStorage.removeItem("albumData");
     localStorage.setItem("albumData",JSON.stringify(this.album));
   }
-  private getDataInLocalStorage(): image[]{
+  public getDataInLocalStorage(): image[]{
     return JSON.parse(localStorage.getItem("albumData"));
   }
 }
