@@ -7,7 +7,7 @@ interface image {
 }
 
 export class Album {
-  private album: Promise<image[]>;
+  private album: image[];
   private albumContainer: HTMLElement;
   private imagesContainer: HTMLDivElement;
   private albumTitle: HTMLDivElement;
@@ -18,31 +18,38 @@ export class Album {
   constructor(containerSelector: string) {
     this.albumContainer = document.querySelector(containerSelector);
     this.currentPage = 1;
-    this.album = this.queryAlbum(1);
     this.renderImagesContainer();
     this.renderButtons();
     this.renderAlbumTitle();
-    this.renderImages();
+    const localData = this.getDataInLocalStorage();
+    if(localData){
+      this.album = localData;
+      this.renderImages();
+    }else {
+      this.queryAlbum(this.currentPage); // this method use renderImages method and setDataInLocalStorage and him set this.album
+    }
   }
 
-  private queryAlbum(id: number): Promise<image[]> {
-    return fetch(`https://jsonplaceholder.typicode.com/albums/${id}/photos`)
+  private queryAlbum(id: number): void {
+    fetch(`https://jsonplaceholder.typicode.com/albums/${id}/photos`)
       .then((response) => response.json())
-      .then((response) => response)
+      .then((response) => {
+        this.album = response;
+        this.renderImages();
+        this.setDataInLocalStorage();
+      })
       .catch((error) => console.error(error));
   }
 
-  private renderImages()  {
+  private renderImages(): void {
     this.imagesContainer.innerHTML = "";
-    this.album.then((response) =>
-      response.map((image) => {
-        const img: HTMLImageElement = document.createElement("img");
-        img.src = image.url;
-        img.classList.add("album__image");
+    this.album.map((image) => {
+      const img: HTMLImageElement = document.createElement("img");
+      img.src = image.url;
+      img.classList.add("album__image");
 
-        this.imagesContainer.append(img);
-      }),
-    );
+      this.imagesContainer.append(img);
+    });
   }
 
   private renderImagesContainer(): void {
@@ -81,7 +88,6 @@ export class Album {
       if (this.currentPage === 1) {
         return;
       }
-      this.album = undefined;
       this.currentPage -= 1;
       this.queryAlbum(this.currentPage);
       this.renderImages();
@@ -89,12 +95,17 @@ export class Album {
       if (this.currentPage === 100) {
         return;
       }
-      this.album = undefined;
       this.currentPage += 1;
       this.queryAlbum(this.currentPage);
       this.renderImages();
     }
   }
+
+  private setDataInLocalStorage(): void{
+    localStorage.removeItem("albumData");
+    localStorage.setItem("albumData",JSON.stringify(this.album));
+  }
+  private getDataInLocalStorage(): image[]{
+    return JSON.parse(localStorage.getItem("albumData"));
+  }
 }
-
-
