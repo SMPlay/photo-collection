@@ -1,5 +1,40 @@
-body {
+.album{
+  display: grid;
+  grid-template-areas: "leftButton title rightButton" "leftButton imgContainer rightButton" "leftButton imgContainer rightButton";
+  grid-template-rows: 40px 1fr 9fr;
+  grid-template-columns: 50px 1fr 50px;
+  width: 720px;
+  height: 670px;
+  margin: 0 auto;
+}
+.album__image-container{
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: imgContainer;
+  grid-gap: 15px 5px;
+  width: 650px;
+  height: 630px;
+  padding: 10px 10px;
+  margin: 0 auto;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.album__image{
+  width: 200px;
+  height: 200px;
+  margin: 5px 2px 5px 2px;
+}
+.album__left-button{
+  grid-area: leftButton;
+}
+.album__right-button{
+  grid-area: rightButton;
+}
+.album__title{
   display: flex;
   justify-content: center;
-  background: red;
+  align-items: center;
+  grid-area: title;
+  border: 1px solid black;
+  box-sizing: border-box;
 }

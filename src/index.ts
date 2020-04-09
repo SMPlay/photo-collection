@@ -1,6 +1,4 @@
 import './style.scss';
+import {Album} from "./album";
 
-console.log('as');
-function sum (a: number, b:number): number {
-  return a * b;
-}
+new Album(".album");
