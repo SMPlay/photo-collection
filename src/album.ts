@@ -7,13 +7,13 @@ interface image {
 }
 
 export class Album {
-  private album: image[];
-  private albumContainer: HTMLElement;
-  private imagesContainer: HTMLDivElement;
-  private albumTitle: HTMLDivElement;
-  private leftButton: HTMLButtonElement;
-  private rightButton: HTMLButtonElement;
-  private currentPage: number;
+  public album: image[];
+  public albumContainer: HTMLElement;
+  public imagesContainer: HTMLDivElement;
+  public albumTitle: HTMLDivElement;
+  public leftButton: HTMLButtonElement;
+  public rightButton: HTMLButtonElement;
+  public currentPage: number;
 
   constructor(containerSelector: string) {
     this.albumContainer = document.querySelector(containerSelector);
@@ -43,6 +43,7 @@ export class Album {
 
   private renderImages(): void {
     this.imagesContainer.innerHTML = "";
+    this.imagesContainer.scrollTop = 0;
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
