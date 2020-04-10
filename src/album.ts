@@ -1,3 +1,5 @@
+import doc = Mocha.reporters.doc;
+
 interface image {
   albumId: number;
   id: number;
@@ -22,11 +24,14 @@ export class Album {
     this.renderButtons();
     this.renderAlbumTitle();
     const localData = this.getDataInLocalStorage();
+
     if(localData){
       this.album = localData;
+      this.currentPage = this.album[0].albumId;
       this.renderImages();
     }else {
       this.queryAlbum(this.currentPage); // this method use renderImages method and setDataInLocalStorage and him set this.album
+      this.renderImages();
     }
   }
 
@@ -35,21 +40,28 @@ export class Album {
       .then((response) => response.json())
       .then((response) => {
         this.album = response;
-        this.renderImages();
         this.setDataInLocalStorage();
+        if(document.querySelector('.album__image')){
+          this.changeImageInDocument(this.album);
+        }
       })
       .catch((error) => console.error(error));
   }
 
   private renderImages(): void {
-    this.imagesContainer.innerHTML = "";
-    this.imagesContainer.scrollTop = 0;
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
       img.classList.add("album__image");
 
       this.imagesContainer.append(img);
+    });
+
+  }
+
+  private changeImageInDocument(album: image[]){
+    Array.from(document.querySelectorAll('.album__image')).map( (image: HTMLImageElement,index: number) => {
+      image.src = album[index].url;
     });
   }
 
@@ -91,14 +103,12 @@ export class Album {
       }
       this.currentPage -= 1;
       this.queryAlbum(this.currentPage);
-      this.renderImages();
     } else {
       if (this.currentPage === 100) {
         return;
       }
       this.currentPage += 1;
       this.queryAlbum(this.currentPage);
-      this.renderImages();
     }
   }
 
