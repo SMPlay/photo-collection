@@ -7,13 +7,13 @@ interface image {
 }
 
 export class Album {
-  public album: image[];
-  public albumContainer: HTMLElement;
-  public imagesContainer: HTMLDivElement;
-  public albumTitle: HTMLDivElement;
-  public leftButton: HTMLButtonElement;
-  public rightButton: HTMLButtonElement;
-  public currentPage: number;
+  private album: image[];
+  private albumContainer: HTMLElement;
+  private imagesContainer: HTMLDivElement;
+  private albumTitle: HTMLDivElement;
+  private leftButton: HTMLButtonElement;
+  private rightButton: HTMLButtonElement;
+  private currentPage: number;
 
   constructor(containerSelector: string) {
     this.albumContainer = document.querySelector(containerSelector);
