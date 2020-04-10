@@ -14,6 +14,8 @@ export class Album {
   private leftButton: HTMLButtonElement;
   private rightButton: HTMLButtonElement;
   private currentPage: number;
+  private scrolled: number;
+  private interval: any;
 
   constructor(containerSelector: string) {
     this.albumContainer = document.querySelector(containerSelector);
@@ -41,9 +43,17 @@ export class Album {
       .catch((error) => console.error(error));
   }
 
-  private renderImages(): void {
+  private getScrollTop(): void {
+    this.scrolled = this.imagesContainer.scrollTop;
+  }
+
+  private async scrollToTop(): Promise<void> {
+    
+  }
+  
+  private async renderImages(): Promise<void> {
+    await this.scrollToTop();
     this.imagesContainer.innerHTML = "";
-    this.imagesContainer.scrollTop = 0;
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
@@ -59,7 +69,7 @@ export class Album {
     this.albumContainer.append(this.imagesContainer);
   }
 
-  private renderAlbumTitle() {
+  private renderAlbumTitle(): void {
     this.albumTitle = document.createElement("div");
     this.albumTitle.classList.add("album__title");
     this.albumTitle.innerText = "Album Title";
@@ -85,6 +95,7 @@ export class Album {
   }
 
   private selectNewPage(direction: string): void {
+    this.getScrollTop()
     if (direction === "left") {
       if (this.currentPage === 1) {
         return;
