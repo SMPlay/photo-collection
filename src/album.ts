@@ -16,8 +16,6 @@ export class Album {
   private leftButton: HTMLButtonElement;
   private rightButton: HTMLButtonElement;
   private currentPage: number;
-  private scrolled: number;
-  private interval: any;
 
   constructor(containerSelector: string) {
     this.albumContainer = document.querySelector(containerSelector);
@@ -27,11 +25,11 @@ export class Album {
     this.renderAlbumTitle();
     const localData = this.getDataInLocalStorage();
 
-    if(localData){
+    if (localData) {
       this.album = localData;
       this.currentPage = this.album[0].albumId;
       this.renderImages();
-    }else {
+    } else {
       this.queryAlbum(this.currentPage); // this method use renderImages method and setDataInLocalStorage and him set this.album
       this.renderImages();
     }
@@ -43,24 +41,21 @@ export class Album {
       .then((response) => {
         this.album = response;
         this.setDataInLocalStorage();
-        if(document.querySelector('.album__image')){
+        if (document.querySelector(".album__image")) {
           this.changeImageInDocument(this.album);
         }
       })
       .catch((error) => console.error(error));
   }
 
-
-  private getScrollTop(): void {
-    this.scrolled = this.imagesContainer.scrollTop;
+  private scrollToTop(): void {
+    this.imagesContainer.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
-  private async scrollToTop(): Promise<void> {
-    
-  }
-  
-  private async renderImages(): Promise<void> {
-    await this.scrollToTop();
+  private renderImages(): void {
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
@@ -68,13 +63,14 @@ export class Album {
 
       this.imagesContainer.append(img);
     });
-
   }
 
-  private changeImageInDocument(album: image[]){
-    Array.from(document.querySelectorAll('.album__image')).map( (image: HTMLImageElement,index: number) => {
-      image.src = album[index].url;
-    });
+  private changeImageInDocument(album: image[]) {
+    Array.from(document.querySelectorAll(".album__image")).map(
+      (image: HTMLImageElement, index: number) => {
+        image.src = album[index].url;
+      },
+    );
   }
 
   private renderImagesContainer(): void {
@@ -109,7 +105,7 @@ export class Album {
   }
 
   private selectNewPage(direction: string): void {
-    this.getScrollTop()
+    this.scrollToTop();
     if (direction === "left") {
       if (this.currentPage === 1) {
         return;
@@ -125,11 +121,11 @@ export class Album {
     }
   }
 
-  private setDataInLocalStorage(): void{
+  private setDataInLocalStorage(): void {
     localStorage.removeItem("albumData");
-    localStorage.setItem("albumData",JSON.stringify(this.album));
+    localStorage.setItem("albumData", JSON.stringify(this.album));
   }
-  private getDataInLocalStorage(): image[]{
+  private getDataInLocalStorage(): image[] {
     return JSON.parse(localStorage.getItem("albumData"));
   }
 }
