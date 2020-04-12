@@ -1,5 +1,7 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -13,11 +15,23 @@ module.exports = {
   devServer: {
     contentBase: "./dist",
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          name: "vendors",
+          test: /node_modules/,
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    },
+  },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: "ts-loader",
+        use: "awesome-typescript-loader",
         exclude: /node_modules/,
       },
       {
@@ -77,8 +91,15 @@ module.exports = {
     extensions: [".ts", ".js"],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: "style.css",
+      filename: "[name].[hash].css",
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: "Module 11",
+      template: `${__dirname}/public/index.html`,
+      filename: `${__dirname}/dist/index.html`,
     }),
   ],
 };
