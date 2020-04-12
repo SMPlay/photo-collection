@@ -59,6 +59,7 @@ export class Album {
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
+      img.title = image.title;
       img.classList.add("album__image");
 
       this.imagesContainer.append(img);
