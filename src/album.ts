@@ -60,6 +60,7 @@ export class Album {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
       img.title = image.title;
+      img.addEventListener("click",() =>  this.fullscreenImage(image));
       img.classList.add("album__image");
 
       this.imagesContainer.append(img);
@@ -126,7 +127,23 @@ export class Album {
     localStorage.removeItem("albumData");
     localStorage.setItem("albumData", JSON.stringify(this.album));
   }
+
   private getDataInLocalStorage(): image[] {
     return JSON.parse(localStorage.getItem("albumData"));
   }
+
+  private fullscreenImage(img: image){
+    this.leftButton.disabled = true;
+    this.rightButton.disabled = true;
+    const image: HTMLImageElement = document.createElement("img");
+    image.src = img.url;
+    image.classList.add("full-screen");
+    image.addEventListener("click",() => {
+      this.leftButton.disabled = false;
+      this.rightButton.disabled = false;
+      image.remove();
+    });
+    this.albumContainer.append(image);
+  }
+
 }

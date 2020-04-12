@@ -1,4 +1,5 @@
-.album{
+.album {
+  position: relative;
   display: grid;
   grid-template-areas: "leftButton title rightButton" "leftButton imgContainer rightButton" "leftButton imgContainer rightButton";
   grid-template-rows: 40px 1fr 9fr;
@@ -7,7 +8,9 @@
   height: 670px;
   margin: 0 auto;
 }
-.album__image-container{
+
+.album__image-container {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   grid-area: imgContainer;
@@ -19,23 +22,50 @@
   overflow: auto;
   box-sizing: border-box;
 }
-.album__image{
+
+.album__image {
   width: 200px;
   height: 200px;
   margin: 5px 2px 5px 2px;
   cursor: pointer;
 }
-.album__left-button{
+
+.album__left-button {
   grid-area: leftButton;
 }
-.album__right-button{
+
+.album__right-button {
   grid-area: rightButton;
 }
-.album__title{
+
+.album__title {
   display: flex;
   justify-content: center;
   align-items: center;
   grid-area: title;
   border: 1px solid black;
   box-sizing: border-box;
+}
+
+.full-screen {
+  position: absolute;
+  width: 650px;
+  height: 630px;
+  top: 40px;
+  left: 50px;
+  animation: full-screen .3s;
+}
+
+@keyframes full-screen {
+  from {
+    width: 0;
+    height: 0;
+    top: -50%;
+    left: -50%;
+    transform: translateX(50%) translateY(50%);
+  }
+  to {
+    width: 650px;
+    height: 630px;
+  }
 }
