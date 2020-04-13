@@ -1,4 +1,4 @@
-import './style.scss';
+import "./style.scss";
 import { Album } from "./album";
 
 new Album(".album");

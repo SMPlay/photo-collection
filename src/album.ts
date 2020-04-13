@@ -1,5 +1,3 @@
-import doc = Mocha.reporters.doc;
-
 interface image {
   albumId: number;
   id: number;
@@ -67,7 +65,7 @@ export class Album {
     });
   }
 
-  private changeImageInDocument(album: image[]) {
+  private changeImageInDocument(album: image[]): void {
     Array.from(document.querySelectorAll(".album__image")).map(
       (image: HTMLImageElement, index: number) => {
         image.src = album[index].url;
@@ -132,7 +130,7 @@ export class Album {
     return JSON.parse(localStorage.getItem("albumData"));
   }
 
-  private fullscreenImage(img: image){
+  private fullscreenImage(img: image): void{
     this.leftButton.disabled = true;
     this.rightButton.disabled = true;
     const image: HTMLImageElement = document.createElement("img");
