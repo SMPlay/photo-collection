@@ -1,0 +1,9 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "collectCoverage": true,
+  "bail": true,
+  "verbose": true,
+  "collectCoverageFrom" : ["./src/test/*.spec.ts", "!**/node_modules/**", "!**/vendor/**"],
+  "setupFilesAfterEnv": ["./setupJest.ts"]
+}

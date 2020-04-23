@@ -55,7 +55,7 @@ export class Album {
   private renderImages(): void {
     if (document.querySelector(".album__image")) {
       this.changeImageInDocument(this.album);
-    }else{
+    } else {
       this.album.map((image) => {
         const img: HTMLImageElement = document.createElement("img");
         img.src = image.url;
@@ -94,13 +94,13 @@ export class Album {
     this.previousButton = document.createElement("button");
     this.previousButton.classList.add("album__left-button");
     this.previousButton.textContent = "<";
-    this.previousButton.addEventListener("click", () => this.selectNewPage("previous"));
+    this.previousButton.addEventListener("click", () =>
+      this.selectNewPage("previous"),
+    );
 
     this.nextButton = document.createElement("button");
     this.nextButton.classList.add("album__right-button");
-    this.nextButton.addEventListener("click", () =>
-      this.selectNewPage("next"),
-    );
+    this.nextButton.addEventListener("click", () => this.selectNewPage("next"));
     this.nextButton.textContent = ">";
 
     this.albumContainer.append(this.previousButton);
@@ -111,7 +111,6 @@ export class Album {
     this.previousButton.disabled = isDisable;
     this.nextButton.disabled = isDisable;
   }
-
 
   private selectNewPage(direction: string): void {
     this.disableButton(true);
