@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import * as sinon from "sinon"
-import { Album } from "../album";
+const abs = (a: number): number => {
+  return a ** 3;
+};
 
-describe("Test", () => {
-
+test("dsfdsf", () => {
+  expect(abs(2)).toBe(8);
 });
