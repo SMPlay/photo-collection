@@ -40,6 +40,7 @@ export class Album {
         this.album = album;
         this.setDataToLocalStorage();
         this.renderImages();
+        this.disableButton(false);
       })
       .catch((error) => console.error(error));
   }
@@ -106,7 +107,14 @@ export class Album {
     this.albumContainer.append(this.nextButton);
   }
 
+  private disableButton(isDisable: boolean): void {
+    this.previousButton.disabled = isDisable;
+    this.nextButton.disabled = isDisable;
+  }
+
+
   private selectNewPage(direction: string): void {
+    this.disableButton(true);
     this.scrollToTop();
     if (direction === "previous") {
       if (this.currentPage === 1) {
