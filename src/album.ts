@@ -27,13 +27,12 @@ export class Album {
     this.renderAlbumTitle();
     const localData = this.getDataFromLocalStorage(this.localStorageKey);
 
-    if (localData) {
+    if (localData !== null) {
       this.album = localData;
       this.currentPage = this.album[0].albumId;
       this.renderImages();
     } else {
       this.fetchAlbum(this.currentPage); // this method use renderImages method and setDataInLocalStorage and him set this.album
-      this.renderImages();
     }
   }
 
@@ -146,7 +145,7 @@ export class Album {
   }
 
   public getDataFromLocalStorage(key: string): Image[] {
-    return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(localStorage.getItem(key)) || null;
   }
 
   private fullscreenImage(img: Image): void {

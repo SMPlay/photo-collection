@@ -5,5 +5,7 @@ const abs = (a: number): number => {
 };
 
 test("dsfdsf", () => {
+
+  const album = new  Album('body');
   expect(abs(2)).toBe(8);
 });
