@@ -1,5 +1,3 @@
-
-
 interface Image {
   albumId: number;
   id: number;
@@ -17,7 +15,6 @@ export class Album {
   private nextButton: HTMLButtonElement;
   private currentPage: number;
   public localStorageKey: string;
-
   constructor(containerSelector: string) {
     this.localStorageKey = "albumData";
     this.albumContainer = document.querySelector(containerSelector);
@@ -41,7 +38,8 @@ export class Album {
       .then((response) => response.json())
       .then((album) => {
         this.album = album;
-        this.setDataToLocalStorage(this.localStorageKey,this.album);
+        this.setDataToLocalStorage(this.localStorageKey, this.album);
+        this.renderLoadingSpinner(true);
         this.renderImages();
         this.disableButton(false, this.previousButton, this.nextButton);
       })
@@ -56,27 +54,14 @@ export class Album {
   }
 
   private renderImages(): void {
-    if (document.querySelector(".album__image")) {
-      this.changeImageInDocument(
-        Array.from(document.querySelectorAll(".album__image")),
-        this.album,
-      );
-    } else {
-      this.album.map((image) => {
-        const img: HTMLImageElement = document.createElement("img");
-        img.src = image.url;
-        img.title = image.title;
-        img.addEventListener("click", () => this.fullscreenImage(image));
-        img.classList.add("album__image");
+    this.album.map((image) => {
+      const img: HTMLImageElement = document.createElement("img");
+      img.src = image.url;
+      img.title = image.title;
+      img.addEventListener("click", () => this.fullscreenImage(image));
+      img.classList.add("album__image");
 
-        this.imagesContainer.append(img);
-      });
-    }
-  }
-
-  private changeImageInDocument(albumImages: HTMLImageElement[], albumData: Image[]): void {
-    albumImages.map((image: HTMLImageElement, index: number) => {
-      image.src = albumData[index].url;
+      this.imagesContainer.append(img);
     });
   }
 
@@ -122,23 +107,24 @@ export class Album {
 
   public selectNewPage(direction: string, currentPage: number): number {
     this.disableButton(true, this.previousButton, this.nextButton);
+    this.renderLoadingSpinner(false);
     this.scrollToTop();
 
     if (direction === "previous") {
       if (currentPage === 1) {
         return 100;
       }
-      return currentPage -= 1;
+      return (currentPage -= 1);
     } else {
       if (currentPage === 100) {
         return 1;
       }
-      return currentPage += 1;
+      return (currentPage += 1);
     }
   }
 
   public setDataToLocalStorage(key: string, data: Image[]): void {
-    if(localStorage.getItem(key)){
+    if (localStorage.getItem(key)) {
       localStorage.removeItem(key);
     }
     localStorage.setItem(key, JSON.stringify(data));
@@ -148,13 +134,24 @@ export class Album {
     return JSON.parse(localStorage.getItem(key)) || null;
   }
 
+  public renderLoadingSpinner(isRemove: boolean): void {
+    if(isRemove){
+      this.imagesContainer.innerHTML = '';
+    }else{
+      this.imagesContainer.innerHTML = '';
+      const p = document.createElement('p');
+      p.innerText = "Loading...";
+      this.imagesContainer.append(p);
+    }
+  }
+
   private fullscreenImage(img: Image): void {
-    this.disableButton(true,this.previousButton,this.nextButton);
+    this.disableButton(true, this.previousButton, this.nextButton);
     const image: HTMLImageElement = document.createElement("img");
     image.src = img.url;
     image.classList.add("full-screen");
     image.addEventListener("click", () => {
-      this.disableButton(false,this.previousButton,this.nextButton);
+      this.disableButton(false, this.previousButton, this.nextButton);
       image.remove();
     });
     this.albumContainer.append(image);
