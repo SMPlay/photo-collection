@@ -1,11 +1,13 @@
+import request from "./__mocks__/request";
+
 const { Album } = require("../album");
 
 const abs = (a: number): number => {
   return a ** 3;
 };
 
-test("dsfdsf", () => {
+test("dsfdsf", done => {
 
-  const album = new  Album('body');
+  const album = new  Album('body',request);
   expect(abs(2)).toBe(8);
 });

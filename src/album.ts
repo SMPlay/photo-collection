@@ -1,10 +1,4 @@
-interface Image {
-  albumId: number;
-  id: number;
-  title: string;
-  url: string;
-  thumbnailUrl: string;
-}
+import { Image } from "./index";
 
 export class Album {
   private album: Image[];
@@ -14,14 +8,20 @@ export class Album {
   private previousButton: HTMLButtonElement;
   private nextButton: HTMLButtonElement;
   private currentPage: number;
+  private fetchFunc: (id: number) => Promise<Image[]>;
   public localStorageKey: string;
-  constructor(containerSelector: string) {
+
+  constructor(
+    containerSelector: string,
+    fetchFunc: (id: number) => Promise<Image[]>,
+  ) {
     this.localStorageKey = "albumData";
     this.albumContainer = document.querySelector(containerSelector);
     this.currentPage = 1;
     this.renderImagesContainer();
     this.renderButtons();
     this.renderAlbumTitle();
+    this.fetchFunc = fetchFunc;
     const localData = this.getDataFromLocalStorage(this.localStorageKey);
 
     if (localData !== null) {
@@ -34,8 +34,7 @@ export class Album {
   }
 
   private fetchAlbum(id: number): void {
-    fetch(`https://jsonplaceholder.typicode.com/albums/${id}/photos`)
-      .then((response) => response.json())
+    this.fetchFunc(id)
       .then((album) => {
         this.album = album;
         this.setDataToLocalStorage(this.localStorageKey, this.album);
@@ -100,7 +99,11 @@ export class Album {
     this.albumContainer.append(this.nextButton);
   }
 
-  public disableButton(isDisable: boolean, previousButton: HTMLButtonElement, nextButton: HTMLButtonElement,): void {
+  public disableButton(
+    isDisable: boolean,
+    previousButton: HTMLButtonElement,
+    nextButton: HTMLButtonElement,
+  ): void {
     previousButton.disabled = isDisable;
     nextButton.disabled = isDisable;
   }
@@ -135,11 +138,11 @@ export class Album {
   }
 
   public renderLoadingSpinner(isRemove: boolean): void {
-    if(isRemove){
-      this.imagesContainer.innerHTML = '';
-    }else{
-      this.imagesContainer.innerHTML = '';
-      const p = document.createElement('p');
+    if (isRemove) {
+      this.imagesContainer.innerHTML = "";
+    } else {
+      this.imagesContainer.innerHTML = "";
+      const p = document.createElement("p");
       p.innerText = "Loading...";
       this.imagesContainer.append(p);
     }
