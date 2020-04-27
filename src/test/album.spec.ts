@@ -9,5 +9,6 @@ const abs = (a: number): number => {
 test("dsfdsf", done => {
 
   const album = new  Album('body',request);
+  done()
   expect(abs(2)).toBe(8);
 });
