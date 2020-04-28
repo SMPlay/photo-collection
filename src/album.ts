@@ -33,7 +33,7 @@ export class Album {
     }
   }
 
-  private fetchAlbum(id: number): void {
+  public fetchAlbum(id: number): void {
     this.fetchFunc(id)
       .then((album) => {
         this.album = album;
@@ -45,14 +45,14 @@ export class Album {
       .catch((error) => console.error(error));
   }
 
-  private scrollToTop(): void {
+  public scrollToTop(): void {
     this.imagesContainer.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }
 
-  private renderImages(): void {
+  public renderImages(): void {
     this.album.map((image) => {
       const img: HTMLImageElement = document.createElement("img");
       img.src = image.url;
@@ -64,13 +64,13 @@ export class Album {
     });
   }
 
-  private renderImagesContainer(): void {
+  public renderImagesContainer(): void {
     this.imagesContainer = document.createElement("div");
     this.imagesContainer.classList.add("album__image-container");
     this.albumContainer.append(this.imagesContainer);
   }
 
-  private renderAlbumTitle(): void {
+  public renderAlbumTitle(): void {
     this.albumTitle = document.createElement("div");
     this.albumTitle.classList.add("album__title");
     this.albumTitle.innerText = "Album Title";
@@ -78,7 +78,7 @@ export class Album {
     this.albumContainer.append(this.albumTitle);
   }
 
-  private renderButtons(): void {
+  public renderButtons(): void {
     this.previousButton = document.createElement("button");
     this.previousButton.classList.add("album__left-button");
     this.previousButton.textContent = "<";
